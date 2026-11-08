@@ -55,8 +55,9 @@ GitHub holds no Cloudflare secrets:
 
 - **Production:** every push to `main` runs `npm run check && npm run build`, then `npx wrangler deploy`, which also
   attaches the `museum.etok.me` custom domain.
-- **PR previews:** every other branch builds the same way and runs `npx wrangler versions upload`. Cloudflare comments
-  the preview URL on the PR.
+- **PR previews:** every other branch builds the same way and runs `npx wrangler preview`, which serves it at
+  `https://<branch>.preview.museum.etok.me/`. Cloudflare comments the link on the PR. Preview hosts send
+  `X-Robots-Tag: noindex` ([`public/_headers`](public/_headers)).
 
 Build settings live on the Worker in the Cloudflare dashboard (Settings → Builds).
 
