@@ -47,13 +47,21 @@ site also works when built under a sub-path (`BASE_PATH=/some/path/ npm run buil
 
 ## Deploys
 
-GitHub Pages serves the `gh-pages` branch at [museum.etok.me](https://museum.etok.me).
+The site is a static-assets-only Cloudflare Worker ([`wrangler.jsonc`](wrangler.jsonc)), served at
+[museum.etok.me](https://museum.etok.me) and
+[museum-of-cool-science.ethan-r-davidson.workers.dev](https://museum-of-cool-science.ethan-r-davidson.workers.dev).
+[Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) deploys it straight from this repo, so
+GitHub holds no Cloudflare secrets:
 
-- **Production:** every push to `main` builds the site and deploys it to the root of `gh-pages`
-  ([`deploy.yaml`](.github/workflows/deploy.yaml)).
-- **PR previews:** every pull request from a branch in this repo builds under `/pr-preview/pr-<n>/` and gets a comment
-  with the link ([`preview.yaml`](.github/workflows/preview.yaml)). Closing the PR removes the preview. PRs from forks
-  don't get previews.
+- **Production:** every push to `main` runs `npm run check && npm run build`, then `npx wrangler deploy`, which also
+  attaches the `museum.etok.me` custom domain.
+- **PR previews:** every other branch builds the same way and runs `npx wrangler preview`, which serves it at
+  `https://<branch>.preview.museum.etok.me/`. Cloudflare comments the link on the PR. Preview hosts send
+  `X-Robots-Tag: noindex` ([`public/_headers`](public/_headers)).
+
+Build settings live on the Worker in the Cloudflare dashboard (Settings → Builds).
+
+To deploy by hand: `npm run build && npx wrangler deploy`.
 
 ## Interface
 
