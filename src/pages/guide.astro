@@ -1,0 +1,117 @@
+---
+import Museum from "../layouts/Museum.astro";
+import { getExhibits, getWings } from "../lib/museum";
+import { withBase } from "../lib/paths";
+
+const wings = await getWings();
+const counts = Map.groupBy(await getExhibits(), (e) => e.data.wing.id);
+
+const conditions: [string, string][] = [
+  ["Mint", "Untouched, as it left the factory or the mint."],
+  ["Near mint", "Barely handled; flaws only show up close."],
+  ["Excellent", "Clearly used, but well kept."],
+  ["Good", "Visible wear, still works and displays fine."],
+  ["Fair", "Heavy wear or damage."],
+  ["Well loved", "Used constantly, and it shows. Usually the best stories."],
+];
+
+const repo = "https://github.com/EthanThatOneKid/museum-of-cool-science";
+---
+
+<Museum title="Visitor guide" description="How to find your way around the Museum of Cool Science.">
+  <h1>Visitor guide</h1>
+  <p>
+    This page explains how the museum is laid out, how to read an exhibit, and which parts of the screen are just for
+    show.
+  </p>
+
+  <div class="lcars-text-bar"><h2>How the museum is organized</h2></div>
+  <p>
+    The <a href={withBase("/")}>lobby</a> opens onto one <strong>wing</strong> per collection. Each wing lists its
+    <strong>exhibits</strong>, newest first, and each exhibit has its own page. The
+    <a href={withBase("/catalog/")}>catalog</a> lists every exhibit in the museum from A to Z.
+  </p>
+  <p>
+    No collection is complete, and none is trying to be. Every wing is a snapshot of what's been picked up, given, or
+    kept.
+  </p>
+  <dl class="readout">
+    {
+      wings.map((wing) => {
+        const n = counts.get(wing.id)?.length ?? 0;
+        return (
+          <>
+            <dt style={`color: var(--${wing.data.color})`}>{wing.data.code}</dt>
+            <dd>
+              <a href={withBase(`/${wing.id}/`)}>{wing.data.title}</a> · {n} {n === 1 ? "exhibit" : "exhibits"}
+            </dd>
+          </>
+        );
+      })
+    }
+  </dl>
+  <p>The short code next to each wing is its label on lobby buttons and exhibit lists.</p>
+
+  <div class="lcars-text-bar"><h2>Reading an exhibit</h2></div>
+  <p>Each exhibit page opens with a readout. Only the lines that are known are shown.</p>
+  <dl class="readout">
+    <dt>Wing</dt>
+    <dd>The collection it belongs to.</dd>
+    <dt>Maker</dt>
+    <dd>Who made it: a company, publisher, studio, or mint.</dd>
+    <dt>Year</dt>
+    <dd>When it was released or minted.</dd>
+    <dt>Acquired</dt>
+    <dd>When it joined the collection.</dd>
+    <dt>Provenance</dt>
+    <dd>Where it came from: a store, a trip, a person.</dd>
+    <dt>Condition</dt>
+    <dd>How it's held up, on the scale below.</dd>
+    <dt>Tags</dt>
+    <dd>Loose labels that cut across wings.</dd>
+  </dl>
+  <p>Below the readout is the exhibit's story, and below that, buttons back to its wing and the lobby.</p>
+  <dl class="readout">
+    {
+      conditions.map(([label, meaning]) => (
+        <>
+          <dt>{label}</dt>
+          <dd>{meaning}</dd>
+        </>
+      ))
+    }
+  </dl>
+
+  <div class="lcars-text-bar"><h2>Reading the screen</h2></div>
+  <p>The museum uses an LCARS interface, the style of the computer screens in Star Trek. Some of it works:</p>
+  <ul>
+    <li>
+      <strong>The four buttons at the top</strong> go to the lobby, the catalog, the about page, and this guide. The
+      button for the page you're on stops blinking.
+    </li>
+    <li>
+      <strong>The banner</strong> shows where you are, then the current stardate. The stardate is real: it starts at
+      41000 in 1987, climbs 1000 a year, and the digit after the point counts tenths of the day.
+    </li>
+    <li><strong>The top-left panel</strong> returns to the lobby.</li>
+    <li><strong>"Screen top"</strong> appears on the left once you scroll down, and jumps back to the top.</li>
+  </ul>
+  <p>The rest is set dressing:</p>
+  <ul>
+    <li>
+      <strong>The columns of numbers</strong> beside the banner don't mean anything. They change from page to page but
+      stay the same each time you visit a page.
+    </li>
+    <li><strong>The numbered panels</strong> down the left side and <strong>the colored bars</strong> are decoration.</li>
+  </ul>
+
+  <div class="lcars-text-bar"><h2>How exhibits get here</h2></div>
+  <p>
+    The museum's source is <a href={repo}>public on GitHub</a>. Each exhibit is a short text file with a photo; the
+    curator's workflow is in <a href={`${repo}/blob/main/CONTRIBUTING.md`}>CONTRIBUTING.md</a>. This is a personal
+    collection, so the curator decides what goes on display.
+  </p>
+  <p>
+    Nothing here is for sale or trade. See the <a href={withBase("/about/#not-for-sale")}>notice</a> on the about page.
+  </p>
+</Museum>

@@ -24,7 +24,7 @@ const nav = [
   { href: withBase("/"), label: "01-lobby", match: (p: string) => p === "/" },
   { href: withBase("/catalog/"), label: "02-catalog", match: (p: string) => p.startsWith("/catalog/") },
   { href: withBase("/about/"), label: "03-about", match: (p: string) => p.startsWith("/about/") },
-  { href: withBase("/about/#not-for-sale"), label: "04-notice", match: () => false },
+  { href: withBase("/guide/"), label: "04-guide", match: (p: string) => p.startsWith("/guide/") },
 ];
 ---
 
