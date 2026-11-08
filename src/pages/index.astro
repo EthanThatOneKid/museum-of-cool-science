@@ -2,6 +2,7 @@
 import Museum from "../layouts/Museum.astro";
 import ExhibitList from "../components/ExhibitList.astro";
 import { getExhibits, getWings } from "../lib/museum";
+import { withBase } from "../lib/paths";
 
 const wings = await getWings();
 const exhibits = await getExhibits();
@@ -23,7 +24,7 @@ const featured = exhibits.filter((e) => e.data.featured);
       wings.map((wing) => {
         const n = counts.get(wing.id)?.length ?? 0;
         return (
-          <a href={`/${wing.id}/`} class="lcars" style={`--wing-color: var(--${wing.data.color})`}>
+          <a href={withBase(`/${wing.id}/`)} class="lcars" style={`--wing-color: var(--${wing.data.color})`}>
             <span>{wing.data.title}</span>
             <span class="wing-count">
               {wing.data.code} · {n} {n === 1 ? "exhibit" : "exhibits"}

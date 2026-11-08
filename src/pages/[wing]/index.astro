@@ -3,6 +3,7 @@ import type { GetStaticPaths } from "astro";
 import Museum from "../../layouts/Museum.astro";
 import ExhibitList from "../../components/ExhibitList.astro";
 import { getExhibits, getWings, type Wing } from "../../lib/museum";
+import { withBase } from "../../lib/paths";
 
 export const getStaticPaths = (async () => {
   const wings = await getWings();
@@ -20,7 +21,7 @@ const exhibits = await getExhibits(wing.id);
     <p>{wing.data.summary}</p>
     <ExhibitList exhibits={exhibits} wings={[wing]} />
     <div class="buttons">
-      <a href="/" class="lcars button-lilac">return to lobby</a>
+      <a href={withBase("/")} class="lcars button-lilac">return to lobby</a>
     </div>
   </div>
 </Museum>

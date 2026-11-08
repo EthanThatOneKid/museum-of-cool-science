@@ -42,6 +42,19 @@ npm run check    # type-check .astro files and content
 npm run build    # static site in dist/
 ```
 
+Internal links go through `withBase()` from [`src/lib/paths.ts`](src/lib/paths.ts), never a bare `"/..."`, so the
+site also works when built under a sub-path (`BASE_PATH=/some/path/ npm run build`).
+
+## Deploys
+
+GitHub Pages serves the `gh-pages` branch at [museum.etok.me](https://museum.etok.me).
+
+- **Production:** every push to `main` builds the site and deploys it to the root of `gh-pages`
+  ([`deploy.yaml`](.github/workflows/deploy.yaml)).
+- **PR previews:** every pull request from a branch in this repo builds under `/pr-preview/pr-<n>/` and gets a comment
+  with the link ([`preview.yaml`](.github/workflows/preview.yaml)). Closing the PR removes the preview. PRs from forks
+  don't get previews.
+
 ## Interface
 
 The look is the

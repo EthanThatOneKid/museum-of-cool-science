@@ -1,22 +1,24 @@
 name: Deploy to GitHub Pages
 
+# Production builds go to the root of the gh-pages branch, which Pages serves.
+# PR previews share that branch under pr-preview/ (see preview.yaml), so this
+# deploy leaves that folder alone and rebases instead of force-pushing.
+
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
-# One deployment at a time; let an in-progress one finish.
+# Shared with preview.yaml so pushes to gh-pages never race.
 concurrency:
-  group: pages
+  group: gh-pages
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -27,16 +29,9 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v5
+      - uses: JamesIves/github-pages-deploy-action@v4
         with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v5
+          folder: dist
+          branch: gh-pages
+          clean-exclude: pr-preview
+          force: false

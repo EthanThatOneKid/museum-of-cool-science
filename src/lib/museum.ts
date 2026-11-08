@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from "astro:content";
+import { withBase } from "./paths";
 
 export type Wing = CollectionEntry<"wings">;
 export type Exhibit = CollectionEntry<"exhibits">;
@@ -25,7 +26,7 @@ export function exhibitSlug(exhibit: Exhibit): string {
 }
 
 export function exhibitHref(exhibit: Exhibit): string {
-  return `/${exhibit.data.wing.id}/${exhibitSlug(exhibit)}/`;
+  return withBase(`/${exhibit.data.wing.id}/${exhibitSlug(exhibit)}/`);
 }
 
 /**
