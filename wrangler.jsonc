@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Static-assets-only Worker: no script, Cloudflare serves the Astro build directly.
+  "name": "museum-of-cool-science",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "force-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  // museum.etok.me is attached once etok.me is an active zone in this account:
+  // "routes": [{ "pattern": "museum.etok.me", "custom_domain": true }],
+  "workers_dev": true,
+  "preview_urls": true
+}

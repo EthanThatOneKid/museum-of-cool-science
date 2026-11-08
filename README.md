@@ -47,13 +47,19 @@ site also works when built under a sub-path (`BASE_PATH=/some/path/ npm run buil
 
 ## Deploys
 
-GitHub Pages serves the `gh-pages` branch at [museum.etok.me](https://museum.etok.me).
+The site is a static-assets-only Cloudflare Worker ([`wrangler.jsonc`](wrangler.jsonc)), served at
+[museum.etok.me](https://museum.etok.me) and
+[museum-of-cool-science.ethan-r-davidson.workers.dev](https://museum-of-cool-science.ethan-r-davidson.workers.dev).
+[`deploy.yaml`](.github/workflows/deploy.yaml) handles both:
 
-- **Production:** every push to `main` builds the site and deploys it to the root of `gh-pages`
-  ([`deploy.yaml`](.github/workflows/deploy.yaml)).
-- **PR previews:** every pull request from a branch in this repo builds under `/pr-preview/pr-<n>/` and gets a comment
-  with the link ([`preview.yaml`](.github/workflows/preview.yaml)). Closing the PR removes the preview. PRs from forks
-  don't get previews.
+- **Production:** every push to `main` runs `wrangler deploy`.
+- **PR previews:** every pull request from a branch in this repo uploads a Worker version with the alias `pr-<n>` and
+  comments its URL, `https://pr-<n>-museum-of-cool-science.ethan-r-davidson.workers.dev/`. PRs from forks only build.
+
+CI needs two repository secrets: `CLOUDFLARE_API_TOKEN` (an API token with the "Edit Cloudflare Workers" template) and
+`CLOUDFLARE_ACCOUNT_ID`.
+
+To deploy by hand: `npm run build && npx wrangler deploy`.
 
 ## Interface
 

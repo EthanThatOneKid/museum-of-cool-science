@@ -1,21 +1,23 @@
-name: Deploy to GitHub Pages
+name: Deploy to Cloudflare
 
-# Production builds go to the root of the gh-pages branch, which Pages serves.
-# PR previews share that branch under pr-preview/ (see preview.yaml), so this
-# deploy leaves that folder alone and rebases instead of force-pushing.
+# Production: every push to main deploys the Worker (museum.etok.me).
+# Previews: every PR from this repo uploads a Worker version under the alias
+# pr-<n> and comments its workers.dev URL. Fork PRs can't read the secrets, so
+# they only build.
 
 on:
   push:
     branches: ["main"]
+  pull_request:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pull-requests: write
 
-# Shared with preview.yaml so pushes to gh-pages never race.
 concurrency:
-  group: gh-pages
-  cancel-in-progress: false
+  group: deploy-${{ github.event.pull_request.number || 'production' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   deploy:
@@ -29,9 +31,35 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
-      - uses: JamesIves/github-pages-deploy-action@v4
+
+      - name: Deploy production
+        if: github.event_name != 'pull_request'
+        uses: cloudflare/wrangler-action@v4
         with:
-          folder: dist
-          branch: gh-pages
-          clean-exclude: pr-preview
-          force: false
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.158.0"
+          command: deploy
+
+      - name: Upload preview
+        id: preview
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.158.0"
+          command: >-
+            versions upload
+            --preview-alias pr-${{ github.event.pull_request.number }}
+            --message "PR #${{ github.event.pull_request.number }} @ ${{ github.event.pull_request.head.sha }}"
+
+      - name: Comment preview URL
+        if: steps.preview.outcome == 'success'
+        uses: marocchino/sticky-pull-request-comment@v3
+        with:
+          header: preview
+          message: |
+            🖖 Preview: https://pr-${{ github.event.pull_request.number }}-museum-of-cool-science.ethan-r-davidson.workers.dev/
+
+            Built from ${{ github.event.pull_request.head.sha }}.

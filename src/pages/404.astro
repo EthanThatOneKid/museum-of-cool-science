@@ -1,0 +1,13 @@
+---
+import Museum from "../layouts/Museum.astro";
+import { withBase } from "../lib/paths";
+---
+
+<Museum title="Exhibit not found" location="Error 404">
+  <h1>Exhibit not found</h1>
+  <p>That room doesn't exist, or the exhibit has been moved to storage.</p>
+  <div class="buttons">
+    <a href={withBase("/")} class="lcars button-lilac">return to lobby</a>
+    <a href={withBase("/catalog/")} class="lcars button-bluey">browse the catalog</a>
+  </div>
+</Museum>
