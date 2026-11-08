@@ -1,4 +1,4 @@
-// The site can be built under a sub-path (PR previews live at /pr-preview/pr-<n>/),
+// The site can be built under a sub-path (BASE_PATH=/some/path/ npm run build),
 // so internal links go through these helpers instead of hard-coding "/".
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
