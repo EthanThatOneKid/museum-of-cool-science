@@ -1,0 +1,4 @@
+# Keep PR previews out of search engines. Cloudflare adds this automatically on workers.dev
+# preview URLs, but not on custom-domain previews.
+https://:preview.preview.museum.etok.me/*
+  X-Robots-Tag: noindex

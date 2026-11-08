@@ -8,7 +8,11 @@
     "html_handling": "force-trailing-slash",
     "not_found_handling": "404-page"
   },
-  "routes": [{ "pattern": "museum.etok.me", "custom_domain": true }],
+  "routes": [
+    { "pattern": "museum.etok.me", "custom_domain": true },
+    // Preview-only host: each Worker Preview is served at <preview-name>.preview.museum.etok.me.
+    { "pattern": "preview.museum.etok.me", "custom_domain": true, "previews_enabled": true, "enabled": false }
+  ],
   "workers_dev": true,
   "preview_urls": true,
   // Required by `wrangler preview`, which Workers Builds runs for non-production branches.
