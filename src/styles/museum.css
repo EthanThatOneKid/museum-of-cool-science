@@ -1,0 +1,97 @@
+/* Museum-specific additions on top of the vendored LCARS Classic theme. */
+
+/* Links styled as LCARS buttons keep the button text treatment. */
+a.lcars {
+  text-decoration: none;
+  color: black;
+}
+
+nav a.lcars[aria-current="page"] {
+  filter: brightness(115%);
+}
+
+/* Lobby: one large pill per wing. */
+.wing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 0.6rem;
+  margin-block: 2rem;
+}
+
+.wing-grid a.lcars {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  min-height: 110px;
+  padding: 0.7rem 1.75rem;
+  border-radius: 100vmax 0 0 100vmax;
+  background-color: var(--wing-color);
+  text-align: right;
+  text-transform: uppercase;
+  line-height: 1.15;
+  font-weight: bold;
+}
+
+.wing-grid a.lcars:hover {
+  filter: brightness(115%);
+}
+
+.wing-grid .wing-count {
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+/* Exhibit listings. */
+.exhibit-list {
+  list-style: none;
+  padding: 0;
+  margin-block: 1.5rem;
+}
+
+.exhibit-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 1rem;
+  padding-block: 0.5rem;
+  border-bottom: 2px solid var(--wing-color, var(--african-violet));
+}
+
+.exhibit-list a {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+.exhibit-list .meta {
+  color: var(--wing-color, var(--african-violet));
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+/* Exhibit detail readout. */
+.readout {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 1.5rem;
+  margin-block: 1.5rem;
+  text-transform: uppercase;
+}
+
+.readout dt {
+  color: var(--wing-color, var(--african-violet));
+}
+
+.readout dd {
+  margin: 0;
+}
+
+.empty-state {
+  color: var(--wing-color, var(--african-violet));
+  text-transform: uppercase;
+}
+
+.exhibit-image {
+  max-width: 100%;
+  height: auto;
+}

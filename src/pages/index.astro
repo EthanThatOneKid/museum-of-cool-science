@@ -1,0 +1,47 @@
+---
+import Museum from "../layouts/Museum.astro";
+import ExhibitList from "../components/ExhibitList.astro";
+import { getExhibits, getWings } from "../lib/museum";
+
+const wings = await getWings();
+const exhibits = await getExhibits();
+const counts = Map.groupBy(exhibits, (e) => e.data.wing.id);
+const featured = exhibits.filter((e) => e.data.featured);
+---
+
+<Museum title="Lobby">
+  <h1>Ethan's Museum of Cool Science</h1>
+  <p>
+    Welcome to the lobby. This is a personal collection of things I love, gathered over the years and put on display
+    for anyone curious. None of the collections are complete, and that's on purpose: it's a curator's cabinet, not a
+    checklist.
+  </p>
+
+  <div class="lcars-text-bar"><h2>Wings</h2></div>
+  <div class="wing-grid">
+    {
+      wings.map((wing) => {
+        const n = counts.get(wing.id)?.length ?? 0;
+        return (
+          <a href={`/${wing.id}/`} class="lcars" style={`--wing-color: var(--${wing.data.color})`}>
+            <span>{wing.data.title}</span>
+            <span class="wing-count">
+              {wing.data.code} · {n} {n === 1 ? "exhibit" : "exhibits"}
+            </span>
+          </a>
+        );
+      })
+    }
+  </div>
+
+  {
+    featured.length > 0 && (
+      <>
+        <div class="lcars-text-bar">
+          <h2>Featured exhibits</h2>
+        </div>
+        <ExhibitList exhibits={featured} wings={wings} />
+      </>
+    )
+  }
+</Museum>

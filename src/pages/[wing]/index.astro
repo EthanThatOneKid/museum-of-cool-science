@@ -1,0 +1,26 @@
+---
+import type { GetStaticPaths } from "astro";
+import Museum from "../../layouts/Museum.astro";
+import ExhibitList from "../../components/ExhibitList.astro";
+import { getExhibits, getWings, type Wing } from "../../lib/museum";
+
+export const getStaticPaths = (async () => {
+  const wings = await getWings();
+  return wings.map((wing) => ({ params: { wing: wing.id }, props: { wing } }));
+}) satisfies GetStaticPaths;
+
+const { wing } = Astro.props as { wing: Wing };
+const exhibits = await getExhibits(wing.id);
+---
+
+<Museum title={wing.data.title} location={`${wing.data.code} Wing`} description={wing.data.summary}>
+  <div style={`--wing-color: var(--${wing.data.color})`}>
+    <h1>{wing.data.title}</h1>
+    <p class="flush uppercase go-big" style="color: var(--wing-color)">{wing.data.code} wing</p>
+    <p>{wing.data.summary}</p>
+    <ExhibitList exhibits={exhibits} wings={[wing]} />
+    <div class="buttons">
+      <a href="/" class="lcars button-lilac">return to lobby</a>
+    </div>
+  </div>
+</Museum>

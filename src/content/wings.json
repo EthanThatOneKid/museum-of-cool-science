@@ -1,0 +1,58 @@
+[
+  {
+    "id": "nintendo",
+    "title": "Nintendo Consoles & Cartridges",
+    "code": "NIN",
+    "order": 1,
+    "color": "bluey",
+    "summary": "Handhelds, home consoles, and the physical cartridges that go in them."
+  },
+  {
+    "id": "star-trek",
+    "title": "Star Trek Memorabilia",
+    "code": "TREK",
+    "order": 2,
+    "color": "red",
+    "summary": "Props, toys, and keepsakes from across the final frontier."
+  },
+  {
+    "id": "comic-books",
+    "title": "Comic Books",
+    "code": "CMX",
+    "order": 3,
+    "color": "orange",
+    "summary": "Issues, runs, and one-offs pulled from the long boxes."
+  },
+  {
+    "id": "pokemon-cards",
+    "title": "Pokémon Cards",
+    "code": "PKMN",
+    "order": 4,
+    "color": "butterscotch",
+    "summary": "Cards from the binder, the deck box, and the shoebox."
+  },
+  {
+    "id": "pressed-pennies",
+    "title": "Pressed Pennies",
+    "code": "PENNY",
+    "order": 5,
+    "color": "almond",
+    "summary": "Elongated coins, one souvenir machine and one trip at a time."
+  },
+  {
+    "id": "dvds",
+    "title": "DVDs",
+    "code": "DVD",
+    "order": 6,
+    "color": "african-violet",
+    "summary": "Films and series on the shelf."
+  },
+  {
+    "id": "books",
+    "title": "Books",
+    "code": "BOOK",
+    "order": 7,
+    "color": "lilac",
+    "summary": "Books worth keeping. Comics have their own wing."
+  }
+]

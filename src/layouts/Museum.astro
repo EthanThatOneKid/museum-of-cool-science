@@ -1,0 +1,130 @@
+---
+import "@fontsource/antonio/400.css";
+import "@fontsource/antonio/700.css";
+import "../styles/vendor/lcars-classic.css";
+import "../styles/museum.css";
+import { dataCascade } from "../lib/museum";
+
+interface Props {
+  /** Page title, shown in the banner and the browser tab. */
+  title: string;
+  description?: string;
+  /** Banner location, e.g. "Lobby" or "Nintendo / Game Boy". */
+  location?: string;
+}
+
+const { title, description = "Ethan's Museum of Cool Science — a personal collection, on display and not for sale.", location = title } = Astro.props;
+const path = Astro.url.pathname;
+const pageTitle = path === "/" ? "Museum of Cool Science" : `${title} · Museum of Cool Science`;
+const cascade = dataCascade(path);
+const rowClass = [1, 1, 2, 3, 3, 4, 5, 6, 7];
+
+const nav = [
+  { href: "/", label: "01-lobby", match: (p: string) => p === "/" },
+  { href: "/catalog/", label: "02-catalog", match: (p: string) => p.startsWith("/catalog/") },
+  { href: "/about/", label: "03-about", match: (p: string) => p.startsWith("/about/") },
+  { href: "/about/#not-for-sale", label: "04-notice", match: () => false },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="date=no" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <section class="wrap-standard" id="column-3">
+      <div class="wrap">
+        <div class="left-frame-top">
+          <a href="/" class="panel-1 lcars"><span class="hop">Museum of</span> Cool Science</a>
+          <div class="panel-2">02<span class="hop">-EMCS</span></div>
+        </div>
+        <div class="right-frame-top">
+          <div class="banner">EMCS / {location} &#149; <span id="stardate"></span></div>
+          <div class="data-cascade-button-group">
+            <div class="data-cascade-wrapper" id="default" aria-hidden="true">
+              {
+                cascade.map((column) => (
+                  <div class="data-column">
+                    {column.map((cell, i) => (
+                      <div class={`dc-row-${rowClass[i]}`}>{cell}</div>
+                    ))}
+                  </div>
+                ))
+              }
+            </div>
+            <nav aria-label="Primary">
+              {
+                nav.map(({ href, label, match }, i) => (
+                  <a
+                    href={href}
+                    class:list={[`nav-${i + 1}`, "lcars", { "animation-on": !match(path) }]}
+                    aria-current={match(path) ? "page" : undefined}
+                  >
+                    {label}
+                  </a>
+                ))
+              }
+            </nav>
+          </div>
+          <div class="bar-panel first-bar-panel">
+            <div class="bar-1"></div>
+            <div class="bar-2"></div>
+            <div class="bar-3"></div>
+            <div class="bar-4"></div>
+            <div class="bar-5"></div>
+          </div>
+        </div>
+      </div>
+      <div class="wrap" id="gap">
+        <div class="left-frame">
+          <button type="button" id="topBtn"><span class="hop">screen</span> top</button>
+          <div>
+            <div class="panel-3">03<span class="hop">-1701D</span></div>
+            <div class="panel-4">04<span class="hop">-040563</span></div>
+            <div class="panel-5">05<span class="hop">-NCC74</span></div>
+            <div class="panel-6">06<span class="hop">-1996GB</span></div>
+            <div class="panel-spacer"></div>
+          </div>
+          <div>
+            <div class="panel-7">07<span class="hop">-EMCS01</span></div>
+          </div>
+        </div>
+        <div class="right-frame">
+          <div class="bar-panel">
+            <div class="bar-6"></div>
+            <div class="bar-7"></div>
+            <div class="bar-8"></div>
+            <div class="bar-9"></div>
+            <div class="bar-10"></div>
+          </div>
+          <main>
+            <slot />
+          </main>
+          <footer>
+            Ethan's Museum of Cool Science. Every exhibit is part of a personal collection and is
+            <a href="/about/#not-for-sale">not for sale</a>.<br />
+            Interface: <a href="https://www.thelcars.com">LCARS Inspired Website Template by www.TheLCARS.com</a>, with
+            modifications.<br />
+            STAR TREK &#174; and related marks are trademarks of CBS Studios Inc. This site is in no way affiliated with
+            CBS Studios Inc.<br />
+            LCARS was designed by graphic artist Michael Okuda.
+          </footer>
+          <div class="headtrim"></div>
+          <div class="baseboard"></div>
+        </div>
+      </div>
+    </section>
+    <script>
+      import { startStardate, wireTopButton } from "../lib/lcars";
+      startStardate(document.getElementById("stardate"));
+      wireTopButton(document.getElementById("topBtn"));
+    </script>
+  </body>
+</html>

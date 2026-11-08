@@ -1,0 +1,60 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getEntry, render } from "astro:content";
+import { Image } from "astro:assets";
+import Museum from "../../layouts/Museum.astro";
+import { exhibitSlug, getExhibits, type Exhibit } from "../../lib/museum";
+
+export const getStaticPaths = (async () => {
+  const exhibits = await getExhibits();
+  return exhibits.map((exhibit) => ({
+    params: { wing: exhibit.data.wing.id, exhibit: exhibitSlug(exhibit) },
+    props: { exhibit },
+  }));
+}) satisfies GetStaticPaths;
+
+const { exhibit } = Astro.props as { exhibit: Exhibit };
+const wing = await getEntry(exhibit.data.wing);
+if (!wing) throw new Error(`exhibit ${exhibit.id} names unknown wing "${exhibit.data.wing.id}"`);
+const { Content } = await render(exhibit);
+const { maker, year, acquired, provenance, condition, image, imageAlt, tags } = exhibit.data;
+const readout: [string, string | number | undefined][] = [
+  ["Wing", wing.data.title],
+  ["Maker", maker],
+  ["Year", year],
+  ["Acquired", acquired],
+  ["Provenance", provenance],
+  ["Condition", condition],
+  ["Tags", tags.length ? tags.join(", ") : undefined],
+];
+---
+
+<Museum title={exhibit.data.title} location={`${wing.data.code} / Exhibit`}>
+  <div style={`--wing-color: var(--${wing.data.color})`}>
+    <h1>{exhibit.data.title}</h1>
+    {
+      image && (
+        <div class="pics-right">
+          <Image src={image} alt={imageAlt ?? exhibit.data.title} class="border exhibit-image" width={800} />
+        </div>
+      )
+    }
+    <dl class="readout">
+      {
+        readout
+          .filter(([, value]) => value !== undefined && value !== "")
+          .map(([label, value]) => (
+            <>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </>
+          ))
+      }
+    </dl>
+    <Content />
+    <div class="buttons">
+      <a href={`/${wing.id}/`} class="lcars button-lilac">return to {wing.data.code} wing</a>
+      <a href="/" class="lcars button-bluey">return to lobby</a>
+    </div>
+  </div>
+</Museum>

@@ -1,0 +1,14 @@
+---
+import Museum from "../layouts/Museum.astro";
+import ExhibitList from "../components/ExhibitList.astro";
+import { getExhibits, getWings } from "../lib/museum";
+
+const wings = await getWings();
+const exhibits = (await getExhibits()).sort((a, b) => a.data.title.localeCompare(b.data.title));
+---
+
+<Museum title="Catalog" description="Every exhibit in the Museum of Cool Science, A to Z.">
+  <h1>Catalog</h1>
+  <p>Every exhibit in the museum, A to Z, across all {wings.length} wings.</p>
+  <ExhibitList exhibits={exhibits} wings={wings} />
+</Museum>

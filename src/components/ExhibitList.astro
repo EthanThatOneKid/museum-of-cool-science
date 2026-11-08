@@ -1,0 +1,31 @@
+---
+import { exhibitHref, type Exhibit, type Wing } from "../lib/museum";
+
+interface Props {
+  exhibits: Exhibit[];
+  /** Wings to label each row with; rows whose wing is missing get no label. */
+  wings?: Wing[];
+}
+
+const { exhibits, wings } = Astro.props;
+const wingById = new Map(wings?.map((w) => [w.id, w]));
+---
+
+{
+  exhibits.length === 0 ? (
+    <p class="empty-state">No exhibits catalogued yet. The curator is still unpacking.</p>
+  ) : (
+    <ul class="exhibit-list">
+      {exhibits.map((exhibit) => {
+        const wing = wingById.get(exhibit.data.wing.id);
+        const meta = [wing?.data.code, exhibit.data.maker, exhibit.data.year].filter(Boolean).join(" · ");
+        return (
+          <li style={wing ? `--wing-color: var(--${wing.data.color})` : undefined}>
+            <a href={exhibitHref(exhibit)}>{exhibit.data.title}</a>
+            {meta && <span class="meta">{meta}</span>}
+          </li>
+        );
+      })}
+    </ul>
+  )
+}

@@ -1,0 +1,25 @@
+{
+  "name": "museum-of-cool-science",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ethan's Museum of Cool Science: a personal, not-for-sale collection archive.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "vendor:lcars": "node scripts/vendor-lcars.mjs"
+  },
+  "dependencies": {
+    "@fontsource/antonio": "^5.3.0",
+    "astro": "7.4.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.23.4"
+  }
+}
