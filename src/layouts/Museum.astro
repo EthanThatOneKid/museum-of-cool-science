@@ -4,6 +4,7 @@ import "@fontsource/antonio/700.css";
 import "../styles/vendor/lcars-classic.css";
 import "../styles/museum.css";
 import { dataCascade } from "../lib/museum";
+import { stripBase, withBase } from "../lib/paths";
 
 interface Props {
   /** Page title, shown in the banner and the browser tab. */
@@ -14,16 +15,16 @@ interface Props {
 }
 
 const { title, description = "Ethan's Museum of Cool Science — a personal collection, on display and not for sale.", location = title } = Astro.props;
-const path = Astro.url.pathname;
+const path = stripBase(Astro.url.pathname);
 const pageTitle = path === "/" ? "Museum of Cool Science" : `${title} · Museum of Cool Science`;
 const cascade = dataCascade(path);
 const rowClass = [1, 1, 2, 3, 3, 4, 5, 6, 7];
 
 const nav = [
-  { href: "/", label: "01-lobby", match: (p: string) => p === "/" },
-  { href: "/catalog/", label: "02-catalog", match: (p: string) => p.startsWith("/catalog/") },
-  { href: "/about/", label: "03-about", match: (p: string) => p.startsWith("/about/") },
-  { href: "/about/#not-for-sale", label: "04-notice", match: () => false },
+  { href: withBase("/"), label: "01-lobby", match: (p: string) => p === "/" },
+  { href: withBase("/catalog/"), label: "02-catalog", match: (p: string) => p.startsWith("/catalog/") },
+  { href: withBase("/about/"), label: "03-about", match: (p: string) => p.startsWith("/about/") },
+  { href: withBase("/about/#not-for-sale"), label: "04-notice", match: () => false },
 ];
 ---
 
@@ -35,14 +36,14 @@ const nav = [
     <meta name="format-detection" content="telephone=no" />
     <meta name="format-detection" content="date=no" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
     <title>{pageTitle}</title>
   </head>
   <body>
     <section class="wrap-standard" id="column-3">
       <div class="wrap">
         <div class="left-frame-top">
-          <a href="/" class="panel-1 lcars"><span class="hop">Museum of</span> Cool Science</a>
+          <a href={withBase("/")} class="panel-1 lcars"><span class="hop">Museum of</span> Cool Science</a>
           <div class="panel-2">02<span class="hop">-EMCS</span></div>
         </div>
         <div class="right-frame-top">
@@ -109,7 +110,7 @@ const nav = [
           </main>
           <footer>
             Ethan's Museum of Cool Science. Every exhibit is part of a personal collection and is
-            <a href="/about/#not-for-sale">not for sale</a>.<br />
+            <a href={withBase("/about/#not-for-sale")}>not for sale</a>.<br />
             Interface: <a href="https://www.thelcars.com">LCARS Inspired Website Template by www.TheLCARS.com</a>, with
             modifications.<br />
             STAR TREK &#174; and related marks are trademarks of CBS Studios Inc. This site is in no way affiliated with
