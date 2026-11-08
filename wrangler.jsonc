@@ -10,5 +10,8 @@
   },
   "routes": [{ "pattern": "museum.etok.me", "custom_domain": true }],
   "workers_dev": true,
-  "preview_urls": true
+  "preview_urls": true,
+  // Required by `wrangler preview`, which Workers Builds runs for non-production branches.
+  // Previews inherit the top-level assets and compatibility settings.
+  "previews": {}
 }
