@@ -3,7 +3,7 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   site: "https://museum.etok.me",
-  // PR previews are served from /pr-preview/pr-<n>/; see .github/workflows/preview.yaml.
+  // Optional sub-path builds (BASE_PATH=/some/path/). Production and previews both serve from the root of their host.
   base: process.env.BASE_PATH || "/",
   trailingSlash: "always",
 });
