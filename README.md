@@ -50,14 +50,15 @@ site also works when built under a sub-path (`BASE_PATH=/some/path/ npm run buil
 The site is a static-assets-only Cloudflare Worker ([`wrangler.jsonc`](wrangler.jsonc)), served at
 [museum.etok.me](https://museum.etok.me) and
 [museum-of-cool-science.ethan-r-davidson.workers.dev](https://museum-of-cool-science.ethan-r-davidson.workers.dev).
-[`deploy.yaml`](.github/workflows/deploy.yaml) handles both:
+[Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) deploys it straight from this repo, so
+GitHub holds no Cloudflare secrets:
 
-- **Production:** every push to `main` runs `wrangler deploy`, which also attaches the `museum.etok.me` custom domain.
-- **PR previews:** every pull request from a branch in this repo uploads a Worker version with the alias `pr-<n>` and
-  comments its URL, `https://pr-<n>-museum-of-cool-science.ethan-r-davidson.workers.dev/`. PRs from forks only build.
+- **Production:** every push to `main` runs `npm run check && npm run build`, then `npx wrangler deploy`, which also
+  attaches the `museum.etok.me` custom domain.
+- **PR previews:** every other branch builds the same way and runs `npx wrangler versions upload`. Cloudflare comments
+  the preview URL on the PR.
 
-CI needs two repository secrets: `CLOUDFLARE_API_TOKEN` (an API token with the "Edit Cloudflare Workers" template) and
-`CLOUDFLARE_ACCOUNT_ID`.
+Build settings live on the Worker in the Cloudflare dashboard (Settings → Builds).
 
 To deploy by hand: `npm run build && npx wrangler deploy`.
 
