@@ -35,6 +35,9 @@ jobs:
         run: npm run build
         env:
           BASE_PATH: /pr-preview/pr-${{ github.event.number }}/
+      # The deploy action never deletes CNAME files, so one in a preview would outlive the PR.
+      - if: github.event.action != 'closed'
+        run: rm -f dist/CNAME
       - uses: rossjrw/pr-preview-action@v1
         with:
           source-dir: dist
