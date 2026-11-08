@@ -52,7 +52,7 @@ The site is a static-assets-only Cloudflare Worker ([`wrangler.jsonc`](wrangler.
 [museum-of-cool-science.ethan-r-davidson.workers.dev](https://museum-of-cool-science.ethan-r-davidson.workers.dev).
 [`deploy.yaml`](.github/workflows/deploy.yaml) handles both:
 
-- **Production:** every push to `main` runs `wrangler deploy`.
+- **Production:** every push to `main` runs `wrangler deploy`, which also attaches the `museum.etok.me` custom domain.
 - **PR previews:** every pull request from a branch in this repo uploads a Worker version with the alias `pr-<n>` and
   comments its URL, `https://pr-<n>-museum-of-cool-science.ethan-r-davidson.workers.dev/`. PRs from forks only build.
 
