@@ -22,14 +22,10 @@ The lobby branches straight into one wing per collection, with no umbrella categ
 Wings live in [`src/content/wings.json`](src/content/wings.json). To add a wing, add an entry there. It gets a lobby
 button and a page at `/<id>/`.
 
-## Adding an exhibit
+## Curating
 
-1. Copy [`src/content/exhibits/_template.md`](src/content/exhibits/_template.md) to
-   `src/content/exhibits/<wing>/<slug>.md`.
-2. Fill in the frontmatter. Only `title` and `wing` are required. To add a photo, put it next to the file and set
-   `image: ./photo.jpg` and `imageAlt`.
-3. The exhibit appears at `/<wing>/<slug>/`, in its wing, and in the catalog. Set `featured: true` to list it in the
-   lobby, or `draft: true` to keep it off the site.
+To add exhibits, change wings, or understand the content model, see [CONTRIBUTING.md](CONTRIBUTING.md). Visitors can
+find how to read the site at [museum.etok.me/guide](https://museum.etok.me/guide/).
 
 ## Development
 

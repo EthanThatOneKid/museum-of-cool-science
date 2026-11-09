@@ -1,6 +1,6 @@
 ---
 # Copy this file to src/content/exhibits/<wing>/<slug>.md (no leading underscore).
-# Files starting with "_" are skipped by the build.
+# Files starting with "_" are skipped by the build. Field reference: CONTRIBUTING.md.
 title: Game Boy Color (Atomic Purple)
 wing: nintendo # one of the ids in src/content/wings.json
 maker: Nintendo
